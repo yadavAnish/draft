@@ -1,0 +1,103 @@
+====odoo 10 get request======
+# models.py
+
+from odoo import models, fields, api
+import logging
+logger = logging.getLogger(name_)
+import requests
+import json
+
+import logging
+logger = logging.getLogger(name_)
+
+class JsonApiData(models.Model):
+    _name = 'api.call'
+    _description = 'JSON API Data'
+
+    name = fields.Char('Title')
+    user_id = fields.Integer('User ID')
+    id = fields.Integer('API ID')
+    
+
+
+
+# Define the API endpoint
+
+    @api.multi
+    def fetch_data_from_api(self):
+    # Define the payload parameters
+        payload = {
+            'addressFieldName': 'city_village',
+            'addressFieldValue': '',
+            'addressSearchResultsConfig': ['city_village', 'address1'],
+            'customAttribute': '',
+            'loginLocationUuid': '02524803-80af-4178-9418-acc04b390b9b',
+            'programAttributeFieldValue': '',
+            'q': 'anis',
+            's': 'byIdOrNameOrVillage',
+            'startIndex': 0
+        }
+        _logger.error("inside fetch_data_from_api_fun")
+        url = "https://192.168.2.40/openmrs/ws/rest/v1/bahmnicore/search/patient"
+        # Define OpenMRS credentials
+        username = 'superman'
+        password = 'Admin123'
+        response = requests.get(url, params=payload,auth=(username, password),verify=False)  # Bypass SSL verification (not recommended for production)
+        if response.status_code == 200:
+            data = response.json()
+            _logger.error(data)
+            
+        else:
+            raise Exception("Failed to fetch data from the API.")
+
+
+================odoo 10 post request=====================
+from odoo import models, fields, api
+import logging
+_logger = logging.getLogger(name)
+import requests
+import json
+
+import logging
+_logger = logging.getLogger(name)
+
+class JsonApiData(models.Model):
+    _name = 'api.call'
+    _description = 'JSON API Data'
+
+    name = fields.Char('Title')
+    user_id = fields.Integer('User ID')
+    id = fields.Integer('API ID')
+    
+
+
+
+# Define the API endpoint
+
+    @api.multi
+    def fetch_data_from_api(self):
+        headers = {
+      
+          'Content-Type': 'application/json',
+          'Disable-Www-Authenticate': 'true',
+    'Host': '192.168.2.32',
+    'Origin': 'https://192.168.2.32',
+    'Referer': 'https://192.168.2.32/bahmni/registration/index.html'
+}
+
+
+    # Define the payload parameters
+        payload = {"patient":{"person":{"names":[{"givenName":"Ahanaodoo","display":"Ahana","preferred":False}],"addresses":[{"address1":"1","cityVillage":"Biratnagar Metropolitan","countyDistrict":"Morang","stateProvince":"Province No. 1","country":"Nepal"}],"birthdate":"2000-01-02T15:48:26.493+0545","gender":"F","birthtime":None,"attributes":[{"attributeType":{"uuid":"a073e544-60a9-11eb-aa89-2cea7fe1ffa7"},"voided":True},{"attributeType":{"uuid":"a073e78b-60a9-11eb-aa89-2cea7fe1ffa7"},"voided":True},{"attributeType":{"uuid":"d94a6dbc-0c2c-4755-921a-631c6cfbc028"},"voided":True},{"attributeType":{"uuid":"c1f4a004-3f10-11e4-adec-0800271c1b75"},"value":"5 - Brahman/Chhetri","hydratedObject":"ca6becca-768f-4033-87fd-dacf1b9bc312"},{"attributeType":{"uuid":"c1f825c9-3f10-11e4-adec-0800271c1b75"},"voided":True},{"attributeType":{"uuid":"802113e2-39ce-476d-a90c-1a211f36215b"},"voided":True},{"attributeType":{"uuid":"d818e29a-c009-4326-a405-1c54526c2bda"},"voided":True},{"attributeType":{"uuid":"ee723ee8-3ed1-4504-94d3-a5b0263c6978"},"voided":True},{"attributeType":{"uuid":"242800c1-04a7-4983-843d-b15f754e7b40"},"voided":True}],"deathDate":None,"causeOfDeath":""},"identifiers":[{"identifierSourceUuid":"ea4d0473-e157-410f-acff-4147343207c0","identifierPrefix":"KDH","identifierType":"81433852-3f10-11e4-adec-0800271c1b75","preferred":True,"voided":False}]},"relationships":[]}
+        _logger.error("inside fetch_data_from_api_fun=%s",payload)
+        url = "https://192.168.2.32/openmrs/ws/rest/v1/bahmnicore/patientprofile"
+        # Define OpenMRS credentials
+        username = 'superman'
+        password = 'Admin123'
+        response = requests.post(url, data=json.dumps(payload),auth=(username, password),headers=headers,verify=False)  # Bypass SSL verification (not recommended for production)
+        if response.status_code == 200:
+            data = response.json()
+            _logger.error(data)
+            
+        else:
+            _logger.error("reposne error =%s",response.text)
+            raise Exception("Failed to fetch data from the API.")
